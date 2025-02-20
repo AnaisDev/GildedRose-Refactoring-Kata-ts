@@ -1,10 +1,4 @@
-import { GildedRose } from "@/gilded-rose";
-
-enum ItemName {
-  AgedBrie = "Aged Brie",
-  Sulfura = "Sulfuras, Hand of Ragnaros",
-  Backstage = "Backstage passes to a TAFKAL80ETC concert",
-}
+import { ItemName, GildedRose } from "@/gilded-rose";
 
 describe("Gilded Rose", () => {
   let fooItem;
@@ -61,7 +55,7 @@ describe("Gilded Rose", () => {
   });
 
   it(`should have a quality no greater than 50`, () => {
-    const gildedRose = new GildedRose([{ ...fooItem, quality: 50 }]);
+    const gildedRose = new GildedRose([{ ...backstageItem, quality: 50 }]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBeLessThanOrEqual(50);
   });
@@ -76,6 +70,7 @@ describe("Gilded Rose", () => {
     const gildedRose = new GildedRose([{ ...agedBrieItem }]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBeGreaterThan(agedBrieItem.quality);
+    expect(items[0].sellIn).toBeLessThan(agedBrieItem.sellIn);
   });
 
   it(`should have a 'Sulfuras' that is never sold or whose quality does not decrease`, () => {
