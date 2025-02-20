@@ -2,6 +2,7 @@ export enum ItemName {
   AgedBrie = "Aged Brie",
   Sulfura = "Sulfuras, Hand of Ragnaros",
   Backstage = "Backstage passes to a TAFKAL80ETC concert",
+  Conjured = "Conjured",
 }
 
 export class Item {
@@ -32,31 +33,30 @@ export class GildedRose {
       switch (item.name) {
         case ItemName.AgedBrie:
           if (item.quality >= qualityMax) break;
-          item.quality = item.quality + 1;
+          item.quality += 1;
           break;
         case ItemName.Backstage:
           if (item.quality >= qualityMax) break;
           if (item.sellIn === 0) {
             item.quality = 0;
           } else if (item.sellIn < 6) {
-            item.quality = item.quality + 3;
+            item.quality += 3;
           } else if (item.sellIn < 11) {
-            item.quality = item.quality + 2;
+            item.quality += 2;
           } else {
-            item.quality = item.quality + 1;
+            item.quality += 1;
           }
           break;
         default:
           if (item.quality === 0) break;
-          if (item.sellIn === 0) {
-            item.quality = item.quality - 2;
+          if (item.sellIn === 0 || item.name === ItemName.Conjured) {
+            item.quality -= 2;
           } else {
-            item.quality = item.quality - 1;
+            item.quality -= 1;
           }
-          break;
       }
 
-      if (item.sellIn > 0) item.sellIn = item.sellIn - 1;
+      if (item.sellIn > 0) item.sellIn -= 1;
     });
 
     return this.items;

@@ -5,6 +5,7 @@ describe("Gilded Rose", () => {
   let agedBrieItem;
   let sulfurasItem;
   let backstageItem;
+  let conjuredItem;
 
   fooItem = {
     name: "foo",
@@ -24,6 +25,12 @@ describe("Gilded Rose", () => {
     name: ItemName.Backstage,
     sellIn: 10,
     quality: 10,
+  };
+
+  conjuredItem = {
+    name: ItemName.Conjured,
+    sellIn: 15,
+    quality: 15,
   };
 
   it("should foo", () => {
@@ -63,7 +70,7 @@ describe("Gilded Rose", () => {
   it(`should have a quality that degrades twice as fast once the sell-by date has passed.`, () => {
     const gildedRose = new GildedRose([{ ...fooItem, sellIn: 0 }]);
     const items = gildedRose.updateQuality();
-    expect(items[0].quality).toBeLessThanOrEqual(fooItem.quality / 2);
+    expect(items[0].quality).toBeLessThanOrEqual(fooItem.quality - 2);
   });
 
   it(`should actually have the 'Aged Brie' quality increase the older it gets.`, () => {
@@ -92,15 +99,21 @@ describe("Gilded Rose", () => {
     expect(items[0].quality).toBe(backstageItem.quality + 2);
   });
 
-  it(`It should have its quality increase by 3 when there are 5 days or less remaining for the Backstage Pass`, () => {
+  it(`should have its quality increase by 3 when there are 5 days or less remaining for the Backstage Pass`, () => {
     const gildedRose = new GildedRose([{ ...backstageItem, sellIn: 5 }]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(backstageItem.quality + 3);
   });
 
-  it(`It should have its quality drop to 0 after the Backstage Pass concert.`, () => {
+  it(`should have its quality drop to 0 after the Backstage Pass concert.`, () => {
     const gildedRose = new GildedRose([{ ...backstageItem, sellIn: 0 }]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(0);
+  });
+
+  it(`should have conjured items that degrade in quality twice as fast as normal items`, () => {
+    const gildedRose = new GildedRose([{ ...conjuredItem }]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(conjuredItem.quality - 2);
   });
 });
